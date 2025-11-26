@@ -785,6 +785,17 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
           }
         }
       },
+      {
+        name: "listSharedDrives",
+        description: "List all Shared Drives (Team Drives) the user has access to",
+        inputSchema: {
+          type: "object",
+          properties: {
+            pageSize: { type: "number", description: "Number of drives to return (default 100, max 100)", optional: true },
+            pageToken: { type: "string", description: "Token for next page", optional: true }
+          }
+        }
+      },
       // {
       //   name: "deleteItem",
       //   description: "Move a file or folder to trash (can be restored from Google Drive trash)",
@@ -1599,6 +1610,31 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         let response = `Contents of folder:\n\n${formattedFiles}`;
         if (res.data.nextPageToken) {
           response += `\n\nMore items available. Use pageToken: ${res.data.nextPageToken}`;
+        }
+
+        return {
+          content: [{ type: "text", text: response }],
+          isError: false
+        };
+      }
+
+      case "listSharedDrives": {
+        const args = request.params.arguments as { pageSize?: number; pageToken?: string };
+
+        const res = await drive.drives.list({
+          pageSize: Math.min(args.pageSize || 100, 100),
+          pageToken: args.pageToken,
+          fields: "nextPageToken, drives(id, name, createdTime)"
+        });
+
+        const drives = res.data.drives || [];
+        const formattedDrives = drives.map((d: any) =>
+          `📁 ${d.name} (ID: ${d.id})`
+        ).join('\n');
+
+        let response = `Shared Drives you have access to:\n\n${formattedDrives || '(none found)'}`;
+        if (res.data.nextPageToken) {
+          response += `\n\nMore available. Use pageToken: ${res.data.nextPageToken}`;
         }
 
         return {
