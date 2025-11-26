@@ -1,5 +1,9 @@
 #!/usr/bin/env node
 
+// READ-ONLY MODE: Write operations are disabled.
+// To enable edits, uncomment the write tools in ListToolsRequestSchema
+// and their corresponding case blocks in CallToolRequestSchema.
+
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import {
@@ -730,44 +734,45 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
           required: ["query"],
         },
       },
-      {
-        name: "createTextFile",
-        description: "Create a new text or markdown file",
-        inputSchema: {
-          type: "object",
-          properties: {
-            name: { type: "string", description: "File name (.txt or .md)" },
-            content: { type: "string", description: "File content" },
-            parentFolderId: { type: "string", description: "Optional parent folder ID", optional: true }
-          },
-          required: ["name", "content"]
-        }
-      },
-      {
-        name: "updateTextFile",
-        description: "Update an existing text or markdown file",
-        inputSchema: {
-          type: "object",
-          properties: {
-            fileId: { type: "string", description: "ID of the file to update" },
-            content: { type: "string", description: "New file content" },
-            name: { type: "string", description: "Optional new name (.txt or .md)", optional: true }
-          },
-          required: ["fileId", "content"]
-        }
-      },
-      {
-        name: "createFolder",
-        description: "Create a new folder in Google Drive",
-        inputSchema: {
-          type: "object",
-          properties: {
-            name: { type: "string", description: "Folder name" },
-            parent: { type: "string", description: "Optional parent folder ID or path", optional: true }
-          },
-          required: ["name"]
-        }
-      },
+      // WRITE TOOLS DISABLED - Uncomment to enable write operations
+      // {
+      //   name: "createTextFile",
+      //   description: "Create a new text or markdown file",
+      //   inputSchema: {
+      //     type: "object",
+      //     properties: {
+      //       name: { type: "string", description: "File name (.txt or .md)" },
+      //       content: { type: "string", description: "File content" },
+      //       parentFolderId: { type: "string", description: "Optional parent folder ID", optional: true }
+      //     },
+      //     required: ["name", "content"]
+      //   }
+      // },
+      // {
+      //   name: "updateTextFile",
+      //   description: "Update an existing text or markdown file",
+      //   inputSchema: {
+      //     type: "object",
+      //     properties: {
+      //       fileId: { type: "string", description: "ID of the file to update" },
+      //       content: { type: "string", description: "New file content" },
+      //       name: { type: "string", description: "Optional new name (.txt or .md)", optional: true }
+      //     },
+      //     required: ["fileId", "content"]
+      //   }
+      // },
+      // {
+      //   name: "createFolder",
+      //   description: "Create a new folder in Google Drive",
+      //   inputSchema: {
+      //     type: "object",
+      //     properties: {
+      //       name: { type: "string", description: "Folder name" },
+      //       parent: { type: "string", description: "Optional parent folder ID or path", optional: true }
+      //     },
+      //     required: ["name"]
+      //   }
+      // },
       {
         name: "listFolder",
         description: "List contents of a folder (defaults to root)",
@@ -780,99 +785,99 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
           }
         }
       },
-      {
-        name: "deleteItem",
-        description: "Move a file or folder to trash (can be restored from Google Drive trash)",
-        inputSchema: {
-          type: "object",
-          properties: {
-            itemId: { type: "string", description: "ID of the item to delete" }
-          },
-          required: ["itemId"]
-        }
-      },
-      {
-        name: "renameItem",
-        description: "Rename a file or folder",
-        inputSchema: {
-          type: "object",
-          properties: {
-            itemId: { type: "string", description: "ID of the item to rename" },
-            newName: { type: "string", description: "New name" }
-          },
-          required: ["itemId", "newName"]
-        }
-      },
-      {
-        name: "moveItem",
-        description: "Move a file or folder",
-        inputSchema: {
-          type: "object",
-          properties: {
-            itemId: { type: "string", description: "ID of the item to move" },
-            destinationFolderId: { type: "string", description: "Destination folder ID", optional: true }
-          },
-          required: ["itemId"]
-        }
-      },
-      {
-        name: "createGoogleDoc",
-        description: "Create a new Google Doc",
-        inputSchema: {
-          type: "object",
-          properties: {
-            name: { type: "string", description: "Doc name" },
-            content: { type: "string", description: "Doc content" },
-            parentFolderId: { type: "string", description: "Parent folder ID", optional: true }
-          },
-          required: ["name", "content"]
-        }
-      },
-      {
-        name: "updateGoogleDoc",
-        description: "Update an existing Google Doc",
-        inputSchema: {
-          type: "object",
-          properties: {
-            documentId: { type: "string", description: "Doc ID" },
-            content: { type: "string", description: "New content" }
-          },
-          required: ["documentId", "content"]
-        }
-      },
-      {
-        name: "createGoogleSheet",
-        description: "Create a new Google Sheet",
-        inputSchema: {
-          type: "object",
-          properties: {
-            name: { type: "string", description: "Sheet name" },
-            data: {
-              type: "array",
-              description: "Data as array of arrays",
-              items: { type: "array", items: { type: "string" } }
-            },
-            parentFolderId: { type: "string", description: "Parent folder ID (defaults to root)", optional: true }
-          },
-          required: ["name", "data"]
-        }
-      },
-      {
-        name: "updateGoogleSheet",
-        description: "Update an existing Google Sheet",
-        inputSchema: {
-          type: "object",
-          properties: {
-            spreadsheetId: { type: "string", description: "Sheet ID" },
-            range: { type: "string", description: "Range to update" },
-            data: {
-              type: "array",
-              items: { type: "array", items: { type: "string" } }
-            }
-          },
-          required: ["spreadsheetId", "range", "data"]
-        }
-      },
+      // {
+      //   name: "deleteItem",
+      //   description: "Move a file or folder to trash (can be restored from Google Drive trash)",
+      //   inputSchema: {
+      //     type: "object",
+      //     properties: {
+      //       itemId: { type: "string", description: "ID of the item to delete" }
+      //     },
+      //     required: ["itemId"]
+      //   }
+      // },
+      // {
+      //   name: "renameItem",
+      //   description: "Rename a file or folder",
+      //   inputSchema: {
+      //     type: "object",
+      //     properties: {
+      //       itemId: { type: "string", description: "ID of the item to rename" },
+      //       newName: { type: "string", description: "New name" }
+      //     },
+      //     required: ["itemId", "newName"]
+      //   }
+      // },
+      // {
+      //   name: "moveItem",
+      //   description: "Move a file or folder",
+      //   inputSchema: {
+      //     type: "object",
+      //     properties: {
+      //       itemId: { type: "string", description: "ID of the item to move" },
+      //       destinationFolderId: { type: "string", description: "Destination folder ID", optional: true }
+      //     },
+      //     required: ["itemId"]
+      //   }
+      // },
+      // {
+      //   name: "createGoogleDoc",
+      //   description: "Create a new Google Doc",
+      //   inputSchema: {
+      //     type: "object",
+      //     properties: {
+      //       name: { type: "string", description: "Doc name" },
+      //       content: { type: "string", description: "Doc content" },
+      //       parentFolderId: { type: "string", description: "Parent folder ID", optional: true }
+      //     },
+      //     required: ["name", "content"]
+      //   }
+      // },
+      // {
+      //   name: "updateGoogleDoc",
+      //   description: "Update an existing Google Doc",
+      //   inputSchema: {
+      //     type: "object",
+      //     properties: {
+      //       documentId: { type: "string", description: "Doc ID" },
+      //       content: { type: "string", description: "New content" }
+      //     },
+      //     required: ["documentId", "content"]
+      //   }
+      // },
+      // {
+      //   name: "createGoogleSheet",
+      //   description: "Create a new Google Sheet",
+      //   inputSchema: {
+      //     type: "object",
+      //     properties: {
+      //       name: { type: "string", description: "Sheet name" },
+      //       data: {
+      //         type: "array",
+      //         description: "Data as array of arrays",
+      //         items: { type: "array", items: { type: "string" } }
+      //       },
+      //       parentFolderId: { type: "string", description: "Parent folder ID (defaults to root)", optional: true }
+      //     },
+      //     required: ["name", "data"]
+      //   }
+      // },
+      // {
+      //   name: "updateGoogleSheet",
+      //   description: "Update an existing Google Sheet",
+      //   inputSchema: {
+      //     type: "object",
+      //     properties: {
+      //       spreadsheetId: { type: "string", description: "Sheet ID" },
+      //       range: { type: "string", description: "Range to update" },
+      //       data: {
+      //         type: "array",
+      //         items: { type: "array", items: { type: "string" } }
+      //       }
+      //     },
+      //     required: ["spreadsheetId", "range", "data"]
+      //   }
+      // },
       {
         name: "getGoogleSheetContent",
         description: "Get content of a Google Sheet with cell information",
@@ -885,303 +890,303 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
           required: ["spreadsheetId", "range"]
         }
       },
-      {
-        name: "formatGoogleSheetCells",
-        description: "Format cells in a Google Sheet (background, borders, alignment)",
-        inputSchema: {
-          type: "object",
-          properties: {
-            spreadsheetId: { type: "string", description: "Spreadsheet ID" },
-            range: { type: "string", description: "Range to format (e.g., 'A1:C10')" },
-            backgroundColor: {
-              type: "object",
-              description: "Background color (RGB values 0-1)",
-              properties: {
-                red: { type: "number", optional: true },
-                green: { type: "number", optional: true },
-                blue: { type: "number", optional: true }
-              },
-              optional: true
-            },
-            horizontalAlignment: {
-              type: "string",
-              description: "Horizontal alignment",
-              enum: ["LEFT", "CENTER", "RIGHT"],
-              optional: true
-            },
-            verticalAlignment: {
-              type: "string",
-              description: "Vertical alignment",
-              enum: ["TOP", "MIDDLE", "BOTTOM"],
-              optional: true
-            },
-            wrapStrategy: {
-              type: "string",
-              description: "Text wrapping",
-              enum: ["OVERFLOW_CELL", "CLIP", "WRAP"],
-              optional: true
-            }
-          },
-          required: ["spreadsheetId", "range"]
-        }
-      },
-      {
-        name: "formatGoogleSheetText",
-        description: "Apply text formatting to cells in a Google Sheet",
-        inputSchema: {
-          type: "object",
-          properties: {
-            spreadsheetId: { type: "string", description: "Spreadsheet ID" },
-            range: { type: "string", description: "Range to format (e.g., 'A1:C10')" },
-            bold: { type: "boolean", description: "Make text bold", optional: true },
-            italic: { type: "boolean", description: "Make text italic", optional: true },
-            strikethrough: { type: "boolean", description: "Strikethrough text", optional: true },
-            underline: { type: "boolean", description: "Underline text", optional: true },
-            fontSize: { type: "number", description: "Font size in points", optional: true },
-            fontFamily: { type: "string", description: "Font family name", optional: true },
-            foregroundColor: {
-              type: "object",
-              description: "Text color (RGB values 0-1)",
-              properties: {
-                red: { type: "number", optional: true },
-                green: { type: "number", optional: true },
-                blue: { type: "number", optional: true }
-              },
-              optional: true
-            }
-          },
-          required: ["spreadsheetId", "range"]
-        }
-      },
-      {
-        name: "formatGoogleSheetNumbers",
-        description: "Apply number formatting to cells in a Google Sheet",
-        inputSchema: {
-          type: "object",
-          properties: {
-            spreadsheetId: { type: "string", description: "Spreadsheet ID" },
-            range: { type: "string", description: "Range to format (e.g., 'A1:C10')" },
-            pattern: {
-              type: "string",
-              description: "Number format pattern (e.g., '#,##0.00', 'yyyy-mm-dd', '$#,##0.00', '0.00%')"
-            },
-            type: {
-              type: "string",
-              description: "Format type",
-              enum: ["NUMBER", "CURRENCY", "PERCENT", "DATE", "TIME", "DATE_TIME", "SCIENTIFIC"],
-              optional: true
-            }
-          },
-          required: ["spreadsheetId", "range", "pattern"]
-        }
-      },
-      {
-        name: "setGoogleSheetBorders",
-        description: "Set borders for cells in a Google Sheet",
-        inputSchema: {
-          type: "object",
-          properties: {
-            spreadsheetId: { type: "string", description: "Spreadsheet ID" },
-            range: { type: "string", description: "Range to format (e.g., 'A1:C10')" },
-            style: {
-              type: "string",
-              description: "Border style",
-              enum: ["SOLID", "DASHED", "DOTTED", "DOUBLE"]
-            },
-            width: { type: "number", description: "Border width (1-3)", optional: true },
-            color: {
-              type: "object",
-              description: "Border color (RGB values 0-1)",
-              properties: {
-                red: { type: "number", optional: true },
-                green: { type: "number", optional: true },
-                blue: { type: "number", optional: true }
-              },
-              optional: true
-            },
-            top: { type: "boolean", description: "Apply to top border", optional: true },
-            bottom: { type: "boolean", description: "Apply to bottom border", optional: true },
-            left: { type: "boolean", description: "Apply to left border", optional: true },
-            right: { type: "boolean", description: "Apply to right border", optional: true },
-            innerHorizontal: { type: "boolean", description: "Apply to inner horizontal borders", optional: true },
-            innerVertical: { type: "boolean", description: "Apply to inner vertical borders", optional: true }
-          },
-          required: ["spreadsheetId", "range", "style"]
-        }
-      },
-      {
-        name: "mergeGoogleSheetCells",
-        description: "Merge cells in a Google Sheet",
-        inputSchema: {
-          type: "object",
-          properties: {
-            spreadsheetId: { type: "string", description: "Spreadsheet ID" },
-            range: { type: "string", description: "Range to merge (e.g., 'A1:C3')" },
-            mergeType: {
-              type: "string",
-              description: "Merge type",
-              enum: ["MERGE_ALL", "MERGE_COLUMNS", "MERGE_ROWS"]
-            }
-          },
-          required: ["spreadsheetId", "range", "mergeType"]
-        }
-      },
-      {
-        name: "addGoogleSheetConditionalFormat",
-        description: "Add conditional formatting to a Google Sheet",
-        inputSchema: {
-          type: "object",
-          properties: {
-            spreadsheetId: { type: "string", description: "Spreadsheet ID" },
-            range: { type: "string", description: "Range to apply formatting (e.g., 'A1:C10')" },
-            condition: {
-              type: "object",
-              description: "Condition configuration",
-              properties: {
-                type: {
-                  type: "string",
-                  description: "Condition type",
-                  enum: ["NUMBER_GREATER", "NUMBER_LESS", "TEXT_CONTAINS", "TEXT_STARTS_WITH", "TEXT_ENDS_WITH", "CUSTOM_FORMULA"]
-                },
-                value: { type: "string", description: "Value to compare or formula" }
-              }
-            },
-            format: {
-              type: "object",
-              description: "Format to apply when condition is true",
-              properties: {
-                backgroundColor: {
-                  type: "object",
-                  properties: {
-                    red: { type: "number", optional: true },
-                    green: { type: "number", optional: true },
-                    blue: { type: "number", optional: true }
-                  },
-                  optional: true
-                },
-                textFormat: {
-                  type: "object",
-                  properties: {
-                    bold: { type: "boolean", optional: true },
-                    foregroundColor: {
-                      type: "object",
-                      properties: {
-                        red: { type: "number", optional: true },
-                        green: { type: "number", optional: true },
-                        blue: { type: "number", optional: true }
-                      },
-                      optional: true
-                    }
-                  },
-                  optional: true
-                }
-              }
-            }
-          },
-          required: ["spreadsheetId", "range", "condition", "format"]
-        }
-      },
-      {
-        name: "createGoogleSlides",
-        description: "Create a new Google Slides presentation",
-        inputSchema: {
-          type: "object",
-          properties: {
-            name: { type: "string", description: "Presentation name" },
-            slides: {
-              type: "array",
-              description: "Array of slide objects",
-              items: {
-                type: "object",
-                properties: {
-                  title: { type: "string" },
-                  content: { type: "string" }
-                }
-              }
-            },
-            parentFolderId: { type: "string", description: "Parent folder ID (defaults to root)", optional: true }
-          },
-          required: ["name", "slides"]
-        }
-      },
-      {
-        name: "updateGoogleSlides",
-        description: "Update an existing Google Slides presentation",
-        inputSchema: {
-          type: "object",
-          properties: {
-            presentationId: { type: "string", description: "Presentation ID" },
-            slides: {
-              type: "array",
-              description: "Array of slide objects to replace existing slides",
-              items: {
-                type: "object",
-                properties: {
-                  title: { type: "string" },
-                  content: { type: "string" }
-                }
-              }
-            }
-          },
-          required: ["presentationId", "slides"]
-        }
-      },
-      {
-        name: "formatGoogleDocText",
-        description: "Apply text formatting to a range in a Google Doc",
-        inputSchema: {
-          type: "object",
-          properties: {
-            documentId: { type: "string", description: "Document ID" },
-            startIndex: { type: "number", description: "Start index (1-based)" },
-            endIndex: { type: "number", description: "End index (1-based)" },
-            bold: { type: "boolean", description: "Make text bold", optional: true },
-            italic: { type: "boolean", description: "Make text italic", optional: true },
-            underline: { type: "boolean", description: "Underline text", optional: true },
-            strikethrough: { type: "boolean", description: "Strikethrough text", optional: true },
-            fontSize: { type: "number", description: "Font size in points", optional: true },
-            foregroundColor: {
-              type: "object",
-              description: "Text color (RGB values 0-1)",
-              properties: {
-                red: { type: "number", optional: true },
-                green: { type: "number", optional: true },
-                blue: { type: "number", optional: true }
-              },
-              optional: true
-            }
-          },
-          required: ["documentId", "startIndex", "endIndex"]
-        }
-      },
-      {
-        name: "formatGoogleDocParagraph",
-        description: "Apply paragraph formatting to a range in a Google Doc",
-        inputSchema: {
-          type: "object",
-          properties: {
-            documentId: { type: "string", description: "Document ID" },
-            startIndex: { type: "number", description: "Start index (1-based)" },
-            endIndex: { type: "number", description: "End index (1-based)" },
-            namedStyleType: {
-              type: "string",
-              description: "Paragraph style",
-              enum: ["NORMAL_TEXT", "TITLE", "SUBTITLE", "HEADING_1", "HEADING_2", "HEADING_3", "HEADING_4", "HEADING_5", "HEADING_6"],
-              optional: true
-            },
-            alignment: {
-              type: "string",
-              description: "Text alignment",
-              enum: ["START", "CENTER", "END", "JUSTIFIED"],
-              optional: true
-            },
-            lineSpacing: { type: "number", description: "Line spacing multiplier", optional: true },
-            spaceAbove: { type: "number", description: "Space above paragraph in points", optional: true },
-            spaceBelow: { type: "number", description: "Space below paragraph in points", optional: true }
-          },
-          required: ["documentId", "startIndex", "endIndex"]
-        }
-      },
+      // {
+      //   name: "formatGoogleSheetCells",
+      //   description: "Format cells in a Google Sheet (background, borders, alignment)",
+      //   inputSchema: {
+      //     type: "object",
+      //     properties: {
+      //       spreadsheetId: { type: "string", description: "Spreadsheet ID" },
+      //       range: { type: "string", description: "Range to format (e.g., 'A1:C10')" },
+      //       backgroundColor: {
+      //         type: "object",
+      //         description: "Background color (RGB values 0-1)",
+      //         properties: {
+      //           red: { type: "number", optional: true },
+      //           green: { type: "number", optional: true },
+      //           blue: { type: "number", optional: true }
+      //         },
+      //         optional: true
+      //       },
+      //       horizontalAlignment: {
+      //         type: "string",
+      //         description: "Horizontal alignment",
+      //         enum: ["LEFT", "CENTER", "RIGHT"],
+      //         optional: true
+      //       },
+      //       verticalAlignment: {
+      //         type: "string",
+      //         description: "Vertical alignment",
+      //         enum: ["TOP", "MIDDLE", "BOTTOM"],
+      //         optional: true
+      //       },
+      //       wrapStrategy: {
+      //         type: "string",
+      //         description: "Text wrapping",
+      //         enum: ["OVERFLOW_CELL", "CLIP", "WRAP"],
+      //         optional: true
+      //       }
+      //     },
+      //     required: ["spreadsheetId", "range"]
+      //   }
+      // },
+      // {
+      //   name: "formatGoogleSheetText",
+      //   description: "Apply text formatting to cells in a Google Sheet",
+      //   inputSchema: {
+      //     type: "object",
+      //     properties: {
+      //       spreadsheetId: { type: "string", description: "Spreadsheet ID" },
+      //       range: { type: "string", description: "Range to format (e.g., 'A1:C10')" },
+      //       bold: { type: "boolean", description: "Make text bold", optional: true },
+      //       italic: { type: "boolean", description: "Make text italic", optional: true },
+      //       strikethrough: { type: "boolean", description: "Strikethrough text", optional: true },
+      //       underline: { type: "boolean", description: "Underline text", optional: true },
+      //       fontSize: { type: "number", description: "Font size in points", optional: true },
+      //       fontFamily: { type: "string", description: "Font family name", optional: true },
+      //       foregroundColor: {
+      //         type: "object",
+      //         description: "Text color (RGB values 0-1)",
+      //         properties: {
+      //           red: { type: "number", optional: true },
+      //           green: { type: "number", optional: true },
+      //           blue: { type: "number", optional: true }
+      //         },
+      //         optional: true
+      //       }
+      //     },
+      //     required: ["spreadsheetId", "range"]
+      //   }
+      // },
+      // {
+      //   name: "formatGoogleSheetNumbers",
+      //   description: "Apply number formatting to cells in a Google Sheet",
+      //   inputSchema: {
+      //     type: "object",
+      //     properties: {
+      //       spreadsheetId: { type: "string", description: "Spreadsheet ID" },
+      //       range: { type: "string", description: "Range to format (e.g., 'A1:C10')" },
+      //       pattern: {
+      //         type: "string",
+      //         description: "Number format pattern (e.g., '#,##0.00', 'yyyy-mm-dd', '$#,##0.00', '0.00%')"
+      //       },
+      //       type: {
+      //         type: "string",
+      //         description: "Format type",
+      //         enum: ["NUMBER", "CURRENCY", "PERCENT", "DATE", "TIME", "DATE_TIME", "SCIENTIFIC"],
+      //         optional: true
+      //       }
+      //     },
+      //     required: ["spreadsheetId", "range", "pattern"]
+      //   }
+      // },
+      // {
+      //   name: "setGoogleSheetBorders",
+      //   description: "Set borders for cells in a Google Sheet",
+      //   inputSchema: {
+      //     type: "object",
+      //     properties: {
+      //       spreadsheetId: { type: "string", description: "Spreadsheet ID" },
+      //       range: { type: "string", description: "Range to format (e.g., 'A1:C10')" },
+      //       style: {
+      //         type: "string",
+      //         description: "Border style",
+      //         enum: ["SOLID", "DASHED", "DOTTED", "DOUBLE"]
+      //       },
+      //       width: { type: "number", description: "Border width (1-3)", optional: true },
+      //       color: {
+      //         type: "object",
+      //         description: "Border color (RGB values 0-1)",
+      //         properties: {
+      //           red: { type: "number", optional: true },
+      //           green: { type: "number", optional: true },
+      //           blue: { type: "number", optional: true }
+      //         },
+      //         optional: true
+      //       },
+      //       top: { type: "boolean", description: "Apply to top border", optional: true },
+      //       bottom: { type: "boolean", description: "Apply to bottom border", optional: true },
+      //       left: { type: "boolean", description: "Apply to left border", optional: true },
+      //       right: { type: "boolean", description: "Apply to right border", optional: true },
+      //       innerHorizontal: { type: "boolean", description: "Apply to inner horizontal borders", optional: true },
+      //       innerVertical: { type: "boolean", description: "Apply to inner vertical borders", optional: true }
+      //     },
+      //     required: ["spreadsheetId", "range", "style"]
+      //   }
+      // },
+      // {
+      //   name: "mergeGoogleSheetCells",
+      //   description: "Merge cells in a Google Sheet",
+      //   inputSchema: {
+      //     type: "object",
+      //     properties: {
+      //       spreadsheetId: { type: "string", description: "Spreadsheet ID" },
+      //       range: { type: "string", description: "Range to merge (e.g., 'A1:C3')" },
+      //       mergeType: {
+      //         type: "string",
+      //         description: "Merge type",
+      //         enum: ["MERGE_ALL", "MERGE_COLUMNS", "MERGE_ROWS"]
+      //       }
+      //     },
+      //     required: ["spreadsheetId", "range", "mergeType"]
+      //   }
+      // },
+      // {
+      //   name: "addGoogleSheetConditionalFormat",
+      //   description: "Add conditional formatting to a Google Sheet",
+      //   inputSchema: {
+      //     type: "object",
+      //     properties: {
+      //       spreadsheetId: { type: "string", description: "Spreadsheet ID" },
+      //       range: { type: "string", description: "Range to apply formatting (e.g., 'A1:C10')" },
+      //       condition: {
+      //         type: "object",
+      //         description: "Condition configuration",
+      //         properties: {
+      //           type: {
+      //             type: "string",
+      //             description: "Condition type",
+      //             enum: ["NUMBER_GREATER", "NUMBER_LESS", "TEXT_CONTAINS", "TEXT_STARTS_WITH", "TEXT_ENDS_WITH", "CUSTOM_FORMULA"]
+      //           },
+      //           value: { type: "string", description: "Value to compare or formula" }
+      //         }
+      //       },
+      //       format: {
+      //         type: "object",
+      //         description: "Format to apply when condition is true",
+      //         properties: {
+      //           backgroundColor: {
+      //             type: "object",
+      //             properties: {
+      //               red: { type: "number", optional: true },
+      //               green: { type: "number", optional: true },
+      //               blue: { type: "number", optional: true }
+      //             },
+      //             optional: true
+      //           },
+      //           textFormat: {
+      //             type: "object",
+      //             properties: {
+      //               bold: { type: "boolean", optional: true },
+      //               foregroundColor: {
+      //                 type: "object",
+      //                 properties: {
+      //                   red: { type: "number", optional: true },
+      //                   green: { type: "number", optional: true },
+      //                   blue: { type: "number", optional: true }
+      //                 },
+      //                 optional: true
+      //               }
+      //             },
+      //             optional: true
+      //           }
+      //         }
+      //       }
+      //     },
+      //     required: ["spreadsheetId", "range", "condition", "format"]
+      //   }
+      // },
+      // {
+      //   name: "createGoogleSlides",
+      //   description: "Create a new Google Slides presentation",
+      //   inputSchema: {
+      //     type: "object",
+      //     properties: {
+      //       name: { type: "string", description: "Presentation name" },
+      //       slides: {
+      //         type: "array",
+      //         description: "Array of slide objects",
+      //         items: {
+      //           type: "object",
+      //           properties: {
+      //             title: { type: "string" },
+      //             content: { type: "string" }
+      //           }
+      //         }
+      //       },
+      //       parentFolderId: { type: "string", description: "Parent folder ID (defaults to root)", optional: true }
+      //     },
+      //     required: ["name", "slides"]
+      //   }
+      // },
+      // {
+      //   name: "updateGoogleSlides",
+      //   description: "Update an existing Google Slides presentation",
+      //   inputSchema: {
+      //     type: "object",
+      //     properties: {
+      //       presentationId: { type: "string", description: "Presentation ID" },
+      //       slides: {
+      //         type: "array",
+      //         description: "Array of slide objects to replace existing slides",
+      //         items: {
+      //           type: "object",
+      //           properties: {
+      //             title: { type: "string" },
+      //             content: { type: "string" }
+      //           }
+      //         }
+      //       }
+      //     },
+      //     required: ["presentationId", "slides"]
+      //   }
+      // },
+      // {
+      //   name: "formatGoogleDocText",
+      //   description: "Apply text formatting to a range in a Google Doc",
+      //   inputSchema: {
+      //     type: "object",
+      //     properties: {
+      //       documentId: { type: "string", description: "Document ID" },
+      //       startIndex: { type: "number", description: "Start index (1-based)" },
+      //       endIndex: { type: "number", description: "End index (1-based)" },
+      //       bold: { type: "boolean", description: "Make text bold", optional: true },
+      //       italic: { type: "boolean", description: "Make text italic", optional: true },
+      //       underline: { type: "boolean", description: "Underline text", optional: true },
+      //       strikethrough: { type: "boolean", description: "Strikethrough text", optional: true },
+      //       fontSize: { type: "number", description: "Font size in points", optional: true },
+      //       foregroundColor: {
+      //         type: "object",
+      //         description: "Text color (RGB values 0-1)",
+      //         properties: {
+      //           red: { type: "number", optional: true },
+      //           green: { type: "number", optional: true },
+      //           blue: { type: "number", optional: true }
+      //         },
+      //         optional: true
+      //       }
+      //     },
+      //     required: ["documentId", "startIndex", "endIndex"]
+      //   }
+      // },
+      // {
+      //   name: "formatGoogleDocParagraph",
+      //   description: "Apply paragraph formatting to a range in a Google Doc",
+      //   inputSchema: {
+      //     type: "object",
+      //     properties: {
+      //       documentId: { type: "string", description: "Document ID" },
+      //       startIndex: { type: "number", description: "Start index (1-based)" },
+      //       endIndex: { type: "number", description: "End index (1-based)" },
+      //       namedStyleType: {
+      //         type: "string",
+      //         description: "Paragraph style",
+      //         enum: ["NORMAL_TEXT", "TITLE", "SUBTITLE", "HEADING_1", "HEADING_2", "HEADING_3", "HEADING_4", "HEADING_5", "HEADING_6"],
+      //         optional: true
+      //       },
+      //       alignment: {
+      //         type: "string",
+      //         description: "Text alignment",
+      //         enum: ["START", "CENTER", "END", "JUSTIFIED"],
+      //         optional: true
+      //       },
+      //       lineSpacing: { type: "number", description: "Line spacing multiplier", optional: true },
+      //       spaceAbove: { type: "number", description: "Space above paragraph in points", optional: true },
+      //       spaceBelow: { type: "number", description: "Space below paragraph in points", optional: true }
+      //     },
+      //     required: ["documentId", "startIndex", "endIndex"]
+      //   }
+      // },
       {
         name: "getGoogleDocContent",
         description: "Get content of a Google Doc with text indices for formatting",
@@ -1205,179 +1210,179 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
           required: ["presentationId"]
         }
       },
-      {
-        name: "formatGoogleSlidesText",
-        description: "Apply text formatting to elements in Google Slides",
-        inputSchema: {
-          type: "object",
-          properties: {
-            presentationId: { type: "string", description: "Presentation ID" },
-            objectId: { type: "string", description: "Object ID of the text element" },
-            startIndex: { type: "number", description: "Start index (0-based)", optional: true },
-            endIndex: { type: "number", description: "End index (0-based)", optional: true },
-            bold: { type: "boolean", description: "Make text bold", optional: true },
-            italic: { type: "boolean", description: "Make text italic", optional: true },
-            underline: { type: "boolean", description: "Underline text", optional: true },
-            strikethrough: { type: "boolean", description: "Strikethrough text", optional: true },
-            fontSize: { type: "number", description: "Font size in points", optional: true },
-            fontFamily: { type: "string", description: "Font family name", optional: true },
-            foregroundColor: {
-              type: "object",
-              description: "Text color (RGB values 0-1)",
-              properties: {
-                red: { type: "number", optional: true },
-                green: { type: "number", optional: true },
-                blue: { type: "number", optional: true }
-              },
-              optional: true
-            }
-          },
-          required: ["presentationId", "objectId"]
-        }
-      },
-      {
-        name: "formatGoogleSlidesParagraph",
-        description: "Apply paragraph formatting to text in Google Slides",
-        inputSchema: {
-          type: "object",
-          properties: {
-            presentationId: { type: "string", description: "Presentation ID" },
-            objectId: { type: "string", description: "Object ID of the text element" },
-            alignment: {
-              type: "string",
-              description: "Text alignment",
-              enum: ["START", "CENTER", "END", "JUSTIFIED"],
-              optional: true
-            },
-            lineSpacing: { type: "number", description: "Line spacing multiplier", optional: true },
-            bulletStyle: {
-              type: "string",
-              description: "Bullet style",
-              enum: ["NONE", "DISC", "ARROW", "SQUARE", "DIAMOND", "STAR", "NUMBERED"],
-              optional: true
-            }
-          },
-          required: ["presentationId", "objectId"]
-        }
-      },
-      {
-        name: "styleGoogleSlidesShape",
-        description: "Style shapes in Google Slides",
-        inputSchema: {
-          type: "object",
-          properties: {
-            presentationId: { type: "string", description: "Presentation ID" },
-            objectId: { type: "string", description: "Shape object ID" },
-            backgroundColor: {
-              type: "object",
-              description: "Background color (RGBA values 0-1)",
-              properties: {
-                red: { type: "number", optional: true },
-                green: { type: "number", optional: true },
-                blue: { type: "number", optional: true },
-                alpha: { type: "number", optional: true }
-              },
-              optional: true
-            },
-            outlineColor: {
-              type: "object",
-              description: "Outline color (RGB values 0-1)",
-              properties: {
-                red: { type: "number", optional: true },
-                green: { type: "number", optional: true },
-                blue: { type: "number", optional: true }
-              },
-              optional: true
-            },
-            outlineWeight: { type: "number", description: "Outline thickness in points", optional: true },
-            outlineDashStyle: {
-              type: "string",
-              description: "Outline dash style",
-              enum: ["SOLID", "DOT", "DASH", "DASH_DOT", "LONG_DASH", "LONG_DASH_DOT"],
-              optional: true
-            }
-          },
-          required: ["presentationId", "objectId"]
-        }
-      },
-      {
-        name: "setGoogleSlidesBackground",
-        description: "Set background color for slides",
-        inputSchema: {
-          type: "object",
-          properties: {
-            presentationId: { type: "string", description: "Presentation ID" },
-            pageObjectIds: {
-              type: "array",
-              description: "Array of slide IDs to update",
-              items: { type: "string" }
-            },
-            backgroundColor: {
-              type: "object",
-              description: "Background color (RGBA values 0-1)",
-              properties: {
-                red: { type: "number", optional: true },
-                green: { type: "number", optional: true },
-                blue: { type: "number", optional: true },
-                alpha: { type: "number", optional: true }
-              }
-            }
-          },
-          required: ["presentationId", "pageObjectIds", "backgroundColor"]
-        }
-      },
-      {
-        name: "createGoogleSlidesTextBox",
-        description: "Create a text box in Google Slides",
-        inputSchema: {
-          type: "object",
-          properties: {
-            presentationId: { type: "string", description: "Presentation ID" },
-            pageObjectId: { type: "string", description: "Slide ID" },
-            text: { type: "string", description: "Text content" },
-            x: { type: "number", description: "X position in EMU (1/360000 cm)" },
-            y: { type: "number", description: "Y position in EMU" },
-            width: { type: "number", description: "Width in EMU" },
-            height: { type: "number", description: "Height in EMU" },
-            fontSize: { type: "number", description: "Font size in points", optional: true },
-            bold: { type: "boolean", description: "Make text bold", optional: true },
-            italic: { type: "boolean", description: "Make text italic", optional: true }
-          },
-          required: ["presentationId", "pageObjectId", "text", "x", "y", "width", "height"]
-        }
-      },
-      {
-        name: "createGoogleSlidesShape",
-        description: "Create a shape in Google Slides",
-        inputSchema: {
-          type: "object",
-          properties: {
-            presentationId: { type: "string", description: "Presentation ID" },
-            pageObjectId: { type: "string", description: "Slide ID" },
-            shapeType: {
-              type: "string",
-              description: "Shape type",
-              enum: ["RECTANGLE", "ELLIPSE", "DIAMOND", "TRIANGLE", "STAR", "ROUND_RECTANGLE", "ARROW"]
-            },
-            x: { type: "number", description: "X position in EMU" },
-            y: { type: "number", description: "Y position in EMU" },
-            width: { type: "number", description: "Width in EMU" },
-            height: { type: "number", description: "Height in EMU" },
-            backgroundColor: {
-              type: "object",
-              description: "Fill color (RGBA values 0-1)",
-              properties: {
-                red: { type: "number", optional: true },
-                green: { type: "number", optional: true },
-                blue: { type: "number", optional: true },
-                alpha: { type: "number", optional: true }
-              },
-              optional: true
-            }
-          },
-          required: ["presentationId", "pageObjectId", "shapeType", "x", "y", "width", "height"]
-        }
-      }
+      // {
+      //   name: "formatGoogleSlidesText",
+      //   description: "Apply text formatting to elements in Google Slides",
+      //   inputSchema: {
+      //     type: "object",
+      //     properties: {
+      //       presentationId: { type: "string", description: "Presentation ID" },
+      //       objectId: { type: "string", description: "Object ID of the text element" },
+      //       startIndex: { type: "number", description: "Start index (0-based)", optional: true },
+      //       endIndex: { type: "number", description: "End index (0-based)", optional: true },
+      //       bold: { type: "boolean", description: "Make text bold", optional: true },
+      //       italic: { type: "boolean", description: "Make text italic", optional: true },
+      //       underline: { type: "boolean", description: "Underline text", optional: true },
+      //       strikethrough: { type: "boolean", description: "Strikethrough text", optional: true },
+      //       fontSize: { type: "number", description: "Font size in points", optional: true },
+      //       fontFamily: { type: "string", description: "Font family name", optional: true },
+      //       foregroundColor: {
+      //         type: "object",
+      //         description: "Text color (RGB values 0-1)",
+      //         properties: {
+      //           red: { type: "number", optional: true },
+      //           green: { type: "number", optional: true },
+      //           blue: { type: "number", optional: true }
+      //         },
+      //         optional: true
+      //       }
+      //     },
+      //     required: ["presentationId", "objectId"]
+      //   }
+      // },
+      // {
+      //   name: "formatGoogleSlidesParagraph",
+      //   description: "Apply paragraph formatting to text in Google Slides",
+      //   inputSchema: {
+      //     type: "object",
+      //     properties: {
+      //       presentationId: { type: "string", description: "Presentation ID" },
+      //       objectId: { type: "string", description: "Object ID of the text element" },
+      //       alignment: {
+      //         type: "string",
+      //         description: "Text alignment",
+      //         enum: ["START", "CENTER", "END", "JUSTIFIED"],
+      //         optional: true
+      //       },
+      //       lineSpacing: { type: "number", description: "Line spacing multiplier", optional: true },
+      //       bulletStyle: {
+      //         type: "string",
+      //         description: "Bullet style",
+      //         enum: ["NONE", "DISC", "ARROW", "SQUARE", "DIAMOND", "STAR", "NUMBERED"],
+      //         optional: true
+      //       }
+      //     },
+      //     required: ["presentationId", "objectId"]
+      //   }
+      // },
+      // {
+      //   name: "styleGoogleSlidesShape",
+      //   description: "Style shapes in Google Slides",
+      //   inputSchema: {
+      //     type: "object",
+      //     properties: {
+      //       presentationId: { type: "string", description: "Presentation ID" },
+      //       objectId: { type: "string", description: "Shape object ID" },
+      //       backgroundColor: {
+      //         type: "object",
+      //         description: "Background color (RGBA values 0-1)",
+      //         properties: {
+      //           red: { type: "number", optional: true },
+      //           green: { type: "number", optional: true },
+      //           blue: { type: "number", optional: true },
+      //           alpha: { type: "number", optional: true }
+      //         },
+      //         optional: true
+      //       },
+      //       outlineColor: {
+      //         type: "object",
+      //         description: "Outline color (RGB values 0-1)",
+      //         properties: {
+      //           red: { type: "number", optional: true },
+      //           green: { type: "number", optional: true },
+      //           blue: { type: "number", optional: true }
+      //         },
+      //         optional: true
+      //       },
+      //       outlineWeight: { type: "number", description: "Outline thickness in points", optional: true },
+      //       outlineDashStyle: {
+      //         type: "string",
+      //         description: "Outline dash style",
+      //         enum: ["SOLID", "DOT", "DASH", "DASH_DOT", "LONG_DASH", "LONG_DASH_DOT"],
+      //         optional: true
+      //       }
+      //     },
+      //     required: ["presentationId", "objectId"]
+      //   }
+      // },
+      // {
+      //   name: "setGoogleSlidesBackground",
+      //   description: "Set background color for slides",
+      //   inputSchema: {
+      //     type: "object",
+      //     properties: {
+      //       presentationId: { type: "string", description: "Presentation ID" },
+      //       pageObjectIds: {
+      //         type: "array",
+      //         description: "Array of slide IDs to update",
+      //         items: { type: "string" }
+      //       },
+      //       backgroundColor: {
+      //         type: "object",
+      //         description: "Background color (RGBA values 0-1)",
+      //         properties: {
+      //           red: { type: "number", optional: true },
+      //           green: { type: "number", optional: true },
+      //           blue: { type: "number", optional: true },
+      //           alpha: { type: "number", optional: true }
+      //         }
+      //       }
+      //     },
+      //     required: ["presentationId", "pageObjectIds", "backgroundColor"]
+      //   }
+      // },
+      // {
+      //   name: "createGoogleSlidesTextBox",
+      //   description: "Create a text box in Google Slides",
+      //   inputSchema: {
+      //     type: "object",
+      //     properties: {
+      //       presentationId: { type: "string", description: "Presentation ID" },
+      //       pageObjectId: { type: "string", description: "Slide ID" },
+      //       text: { type: "string", description: "Text content" },
+      //       x: { type: "number", description: "X position in EMU (1/360000 cm)" },
+      //       y: { type: "number", description: "Y position in EMU" },
+      //       width: { type: "number", description: "Width in EMU" },
+      //       height: { type: "number", description: "Height in EMU" },
+      //       fontSize: { type: "number", description: "Font size in points", optional: true },
+      //       bold: { type: "boolean", description: "Make text bold", optional: true },
+      //       italic: { type: "boolean", description: "Make text italic", optional: true }
+      //     },
+      //     required: ["presentationId", "pageObjectId", "text", "x", "y", "width", "height"]
+      //   }
+      // },
+      // {
+      //   name: "createGoogleSlidesShape",
+      //   description: "Create a shape in Google Slides",
+      //   inputSchema: {
+      //     type: "object",
+      //     properties: {
+      //       presentationId: { type: "string", description: "Presentation ID" },
+      //       pageObjectId: { type: "string", description: "Slide ID" },
+      //       shapeType: {
+      //         type: "string",
+      //         description: "Shape type",
+      //         enum: ["RECTANGLE", "ELLIPSE", "DIAMOND", "TRIANGLE", "STAR", "ROUND_RECTANGLE", "ARROW"]
+      //       },
+      //       x: { type: "number", description: "X position in EMU" },
+      //       y: { type: "number", description: "Y position in EMU" },
+      //       width: { type: "number", description: "Width in EMU" },
+      //       height: { type: "number", description: "Height in EMU" },
+      //       backgroundColor: {
+      //         type: "object",
+      //         description: "Fill color (RGBA values 0-1)",
+      //         properties: {
+      //           red: { type: "number", optional: true },
+      //           green: { type: "number", optional: true },
+      //           blue: { type: "number", optional: true },
+      //           alpha: { type: "number", optional: true }
+      //         },
+      //         optional: true
+      //       }
+      //     },
+      //     required: ["presentationId", "pageObjectId", "shapeType", "x", "y", "width", "height"]
+      //   }
+      // }
     ]
   };
 });
@@ -1427,142 +1432,143 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         };
       }
 
-      case "createTextFile": {
-        const validation = CreateTextFileSchema.safeParse(request.params.arguments);
-        if (!validation.success) {
-          return errorResponse(validation.error.errors[0].message);
-        }
-        const args = validation.data;
+      // WRITE CASE BLOCKS DISABLED - Uncomment to enable write operations
+      // case "createTextFile": {
+      //   const validation = CreateTextFileSchema.safeParse(request.params.arguments);
+      //   if (!validation.success) {
+      //     return errorResponse(validation.error.errors[0].message);
+      //   }
+      //   const args = validation.data;
 
-        validateTextFileExtension(args.name);
-        const parentFolderId = await resolveFolderId(args.parentFolderId);
+      //   validateTextFileExtension(args.name);
+      //   const parentFolderId = await resolveFolderId(args.parentFolderId);
 
-        // Check if file already exists
-        const existingFileId = await checkFileExists(args.name, parentFolderId);
-        if (existingFileId) {
-          return errorResponse(
-            `A file named "${args.name}" already exists in this location. ` +
-            `To update it, use updateTextFile with fileId: ${existingFileId}`
-          );
-        }
+      //   // Check if file already exists
+      //   const existingFileId = await checkFileExists(args.name, parentFolderId);
+      //   if (existingFileId) {
+      //     return errorResponse(
+      //       `A file named "${args.name}" already exists in this location. ` +
+      //       `To update it, use updateTextFile with fileId: ${existingFileId}`
+      //     );
+      //   }
 
-        const fileMetadata = {
-          name: args.name,
-          mimeType: getMimeTypeFromFilename(args.name),
-          parents: [parentFolderId]
-        };
+      //   const fileMetadata = {
+      //     name: args.name,
+      //     mimeType: getMimeTypeFromFilename(args.name),
+      //     parents: [parentFolderId]
+      //   };
 
-        log('About to create file', {
-          driveExists: !!drive,
-          authClientExists: !!authClient,
-          hasAccessToken: !!authClient?.credentials?.access_token,
-          tokenLength: authClient?.credentials?.access_token?.length
-        });
+      //   log('About to create file', {
+      //     driveExists: !!drive,
+      //     authClientExists: !!authClient,
+      //     hasAccessToken: !!authClient?.credentials?.access_token,
+      //     tokenLength: authClient?.credentials?.access_token?.length
+      //   });
 
-        const file = await drive.files.create({
-          requestBody: fileMetadata,
-          media: {
-            mimeType: fileMetadata.mimeType,
-            body: args.content,
-          },
-          supportsAllDrives: true,
-        });
+      //   const file = await drive.files.create({
+      //     requestBody: fileMetadata,
+      //     media: {
+      //       mimeType: fileMetadata.mimeType,
+      //       body: args.content,
+      //     },
+      //     supportsAllDrives: true,
+      //   });
 
-        log('File created successfully', { fileId: file.data?.id });
-        return {
-          content: [{
-            type: "text",
-            text: `Created file: ${file.data?.name || args.name}\nID: ${file.data?.id || 'unknown'}`
-          }],
-          isError: false
-        };
-      }
+      //   log('File created successfully', { fileId: file.data?.id });
+      //   return {
+      //     content: [{
+      //       type: "text",
+      //       text: `Created file: ${file.data?.name || args.name}\nID: ${file.data?.id || 'unknown'}`
+      //     }],
+      //     isError: false
+      //   };
+      // }
 
-      case "updateTextFile": {
-        const validation = UpdateTextFileSchema.safeParse(request.params.arguments);
-        if (!validation.success) {
-          return errorResponse(validation.error.errors[0].message);
-        }
-        const args = validation.data;
+      // case "updateTextFile": {
+      //   const validation = UpdateTextFileSchema.safeParse(request.params.arguments);
+      //   if (!validation.success) {
+      //     return errorResponse(validation.error.errors[0].message);
+      //   }
+      //   const args = validation.data;
 
-        // Check file MIME type
-        const existingFile = await drive.files.get({
-          fileId: args.fileId,
-          fields: 'mimeType, name, parents',
-          supportsAllDrives: true,
-        });
+      //   // Check file MIME type
+      //   const existingFile = await drive.files.get({
+      //     fileId: args.fileId,
+      //     fields: 'mimeType, name, parents',
+      //     supportsAllDrives: true,
+      //   });
 
-        const currentMimeType = existingFile.data.mimeType || 'text/plain';
-        if (!Object.values(TEXT_MIME_TYPES).includes(currentMimeType)) {
-          return errorResponse("File is not a text or markdown file.");
-        }
+      //   const currentMimeType = existingFile.data.mimeType || 'text/plain';
+      //   if (!Object.values(TEXT_MIME_TYPES).includes(currentMimeType)) {
+      //     return errorResponse("File is not a text or markdown file.");
+      //   }
 
-        const updateMetadata: { name?: string; mimeType?: string } = {};
-        if (args.name) {
-          validateTextFileExtension(args.name);
-          updateMetadata.name = args.name;
-          updateMetadata.mimeType = getMimeTypeFromFilename(args.name);
-        }
+      //   const updateMetadata: { name?: string; mimeType?: string } = {};
+      //   if (args.name) {
+      //     validateTextFileExtension(args.name);
+      //     updateMetadata.name = args.name;
+      //     updateMetadata.mimeType = getMimeTypeFromFilename(args.name);
+      //   }
 
-        const updatedFile = await drive.files.update({
-          fileId: args.fileId,
-          requestBody: updateMetadata,
-          media: {
-            mimeType: updateMetadata.mimeType || currentMimeType,
-            body: args.content
-          },
-          fields: 'id, name, modifiedTime, webViewLink',
-          supportsAllDrives: true,
-        });
+      //   const updatedFile = await drive.files.update({
+      //     fileId: args.fileId,
+      //     requestBody: updateMetadata,
+      //     media: {
+      //       mimeType: updateMetadata.mimeType || currentMimeType,
+      //       body: args.content
+      //     },
+      //     fields: 'id, name, modifiedTime, webViewLink',
+      //     supportsAllDrives: true,
+      //   });
 
-        return {
-          content: [{
-            type: "text",
-            text: `Updated file: ${updatedFile.data.name}\nModified: ${updatedFile.data.modifiedTime}`
-          }],
-          isError: false
-        };
-      }
+      //   return {
+      //     content: [{
+      //       type: "text",
+      //       text: `Updated file: ${updatedFile.data.name}\nModified: ${updatedFile.data.modifiedTime}`
+      //     }],
+      //     isError: false
+      //   };
+      // }
 
-      case "createFolder": {
-        const validation = CreateFolderSchema.safeParse(request.params.arguments);
-        if (!validation.success) {
-          return errorResponse(validation.error.errors[0].message);
-        }
-        const args = validation.data;
+      // case "createFolder": {
+      //   const validation = CreateFolderSchema.safeParse(request.params.arguments);
+      //   if (!validation.success) {
+      //     return errorResponse(validation.error.errors[0].message);
+      //   }
+      //   const args = validation.data;
 
-        const parentFolderId = await resolveFolderId(args.parent);
+      //   const parentFolderId = await resolveFolderId(args.parent);
 
-        // Check if folder already exists
-        const existingFolderId = await checkFileExists(args.name, parentFolderId);
-        if (existingFolderId) {
-          return errorResponse(
-            `A folder named "${args.name}" already exists in this location. ` +
-            `Folder ID: ${existingFolderId}`
-          );
-        }
-        const folderMetadata = {
-          name: args.name,
-          mimeType: FOLDER_MIME_TYPE,
-          parents: [parentFolderId]
-        };
+      //   // Check if folder already exists
+      //   const existingFolderId = await checkFileExists(args.name, parentFolderId);
+      //   if (existingFolderId) {
+      //     return errorResponse(
+      //       `A folder named "${args.name}" already exists in this location. ` +
+      //       `Folder ID: ${existingFolderId}`
+      //     );
+      //   }
+      //   const folderMetadata = {
+      //     name: args.name,
+      //     mimeType: FOLDER_MIME_TYPE,
+      //     parents: [parentFolderId]
+      //   };
 
-        const folder = await drive.files.create({
-          requestBody: folderMetadata,
-          fields: 'id, name, webViewLink',
-          supportsAllDrives: true,
-        });
+      //   const folder = await drive.files.create({
+      //     requestBody: folderMetadata,
+      //     fields: 'id, name, webViewLink',
+      //     supportsAllDrives: true,
+      //   });
 
-        log('Folder created successfully', { folderId: folder.data.id, name: folder.data.name });
+      //   log('Folder created successfully', { folderId: folder.data.id, name: folder.data.name });
 
-        return {
-          content: [{
-            type: "text",
-            text: `Created folder: ${folder.data.name}\nID: ${folder.data.id}`
-          }],
-          isError: false
-        };
-      }
+      //   return {
+      //     content: [{
+      //       type: "text",
+      //       text: `Created folder: ${folder.data.name}\nID: ${folder.data.id}`
+      //     }],
+      //     isError: false
+      //   };
+      // }
 
       case "listFolder": {
         const validation = ListFolderSchema.safeParse(request.params.arguments);
@@ -1601,330 +1607,330 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         };
       }
 
-      case "deleteItem": {
-        const validation = DeleteItemSchema.safeParse(request.params.arguments);
-        if (!validation.success) {
-          return errorResponse(validation.error.errors[0].message);
-        }
-        const args = validation.data;
+      // case "deleteItem": {
+      //   const validation = DeleteItemSchema.safeParse(request.params.arguments);
+      //   if (!validation.success) {
+      //     return errorResponse(validation.error.errors[0].message);
+      //   }
+      //   const args = validation.data;
 
-        const item = await drive.files.get({ fileId: args.itemId, fields: 'name', supportsAllDrives: true });
+      //   const item = await drive.files.get({ fileId: args.itemId, fields: 'name', supportsAllDrives: true });
 
-        // Move to trash instead of permanent deletion
-        await drive.files.update({
-          fileId: args.itemId,
-          requestBody: {
-            trashed: true
-          },
-          supportsAllDrives: true,
-        });
+      //   // Move to trash instead of permanent deletion
+      //   await drive.files.update({
+      //     fileId: args.itemId,
+      //     requestBody: {
+      //       trashed: true
+      //     },
+      //     supportsAllDrives: true,
+      //   });
 
-        log('Item moved to trash successfully', { itemId: args.itemId, name: item.data.name });
-        return {
-          content: [{ type: "text", text: `Successfully moved to trash: ${item.data.name}` }],
-          isError: false
-        };
-      }
+      //   log('Item moved to trash successfully', { itemId: args.itemId, name: item.data.name });
+      //   return {
+      //     content: [{ type: "text", text: `Successfully moved to trash: ${item.data.name}` }],
+      //     isError: false
+      //   };
+      // }
 
-      case "renameItem": {
-        const validation = RenameItemSchema.safeParse(request.params.arguments);
-        if (!validation.success) {
-          return errorResponse(validation.error.errors[0].message);
-        }
-        const args = validation.data;
+      // case "renameItem": {
+      //   const validation = RenameItemSchema.safeParse(request.params.arguments);
+      //   if (!validation.success) {
+      //     return errorResponse(validation.error.errors[0].message);
+      //   }
+      //   const args = validation.data;
 
-        // If it's a text file, check extension
-        const item = await drive.files.get({ fileId: args.itemId, fields: 'name, mimeType', supportsAllDrives: true });
-        if (Object.values(TEXT_MIME_TYPES).includes(item.data.mimeType || '')) {
-          validateTextFileExtension(args.newName);
-        }
+      //   // If it's a text file, check extension
+      //   const item = await drive.files.get({ fileId: args.itemId, fields: 'name, mimeType', supportsAllDrives: true });
+      //   if (Object.values(TEXT_MIME_TYPES).includes(item.data.mimeType || '')) {
+      //     validateTextFileExtension(args.newName);
+      //   }
 
-        const updatedItem = await drive.files.update({
-          fileId: args.itemId,
-          requestBody: { name: args.newName },
-          fields: 'id, name, modifiedTime',
-          supportsAllDrives: true,
-        });
+      //   const updatedItem = await drive.files.update({
+      //     fileId: args.itemId,
+      //     requestBody: { name: args.newName },
+      //     fields: 'id, name, modifiedTime',
+      //     supportsAllDrives: true,
+      //   });
 
-        return {
-          content: [{
-            type: "text",
-            text: `Successfully renamed "${item.data.name}" to "${updatedItem.data.name}"`
-          }],
-          isError: false
-        };
-      }
+      //   return {
+      //     content: [{
+      //       type: "text",
+      //       text: `Successfully renamed "${item.data.name}" to "${updatedItem.data.name}"`
+      //     }],
+      //     isError: false
+      //   };
+      // }
 
-      case "moveItem": {
-        const validation = MoveItemSchema.safeParse(request.params.arguments);
-        if (!validation.success) {
-          return errorResponse(validation.error.errors[0].message);
-        }
-        const args = validation.data;
+      // case "moveItem": {
+      //   const validation = MoveItemSchema.safeParse(request.params.arguments);
+      //   if (!validation.success) {
+      //     return errorResponse(validation.error.errors[0].message);
+      //   }
+      //   const args = validation.data;
 
-        const destinationFolderId = args.destinationFolderId ?
-          await resolveFolderId(args.destinationFolderId) :
-          'root';
+      //   const destinationFolderId = args.destinationFolderId ?
+      //     await resolveFolderId(args.destinationFolderId) :
+      //     'root';
 
-        // Check we aren't moving a folder into itself or its descendant
-        if (args.destinationFolderId === args.itemId) {
-          return errorResponse("Cannot move a folder into itself.");
-        }
+      //   // Check we aren't moving a folder into itself or its descendant
+      //   if (args.destinationFolderId === args.itemId) {
+      //     return errorResponse("Cannot move a folder into itself.");
+      //   }
 
-        const item = await drive.files.get({ fileId: args.itemId, fields: 'name, parents', supportsAllDrives: true });
+      //   const item = await drive.files.get({ fileId: args.itemId, fields: 'name, parents', supportsAllDrives: true });
 
-        // Perform move
-        await drive.files.update({
-          fileId: args.itemId,
-          addParents: destinationFolderId,
-          removeParents: item.data.parents?.join(',') || '',
-          fields: 'id, name, parents',
-          supportsAllDrives: true,
-        });
+      //   // Perform move
+      //   await drive.files.update({
+      //     fileId: args.itemId,
+      //     addParents: destinationFolderId,
+      //     removeParents: item.data.parents?.join(',') || '',
+      //     fields: 'id, name, parents',
+      //     supportsAllDrives: true,
+      //   });
 
-        // Get the destination folder name for a nice response
-        const destinationFolder = await drive.files.get({
-          fileId: destinationFolderId,
-          fields: 'name',
-          supportsAllDrives: true,
-        });
+      //   // Get the destination folder name for a nice response
+      //   const destinationFolder = await drive.files.get({
+      //     fileId: destinationFolderId,
+      //     fields: 'name',
+      //     supportsAllDrives: true,
+      //   });
 
-        return {
-          content: [{
-            type: "text",
-            text: `Successfully moved "${item.data.name}" to "${destinationFolder.data.name}"`
-          }],
-          isError: false
-        };
-      }
+      //   return {
+      //     content: [{
+      //       type: "text",
+      //       text: `Successfully moved "${item.data.name}" to "${destinationFolder.data.name}"`
+      //     }],
+      //     isError: false
+      //   };
+      // }
 
-      case "createGoogleDoc": {
-        const validation = CreateGoogleDocSchema.safeParse(request.params.arguments);
-        if (!validation.success) {
-          return errorResponse(validation.error.errors[0].message);
-        }
-        const args = validation.data;
+      // case "createGoogleDoc": {
+      //   const validation = CreateGoogleDocSchema.safeParse(request.params.arguments);
+      //   if (!validation.success) {
+      //     return errorResponse(validation.error.errors[0].message);
+      //   }
+      //   const args = validation.data;
+      //
+      //   const parentFolderId = await resolveFolderId(args.parentFolderId);
+      //
+      //   // Check if document already exists
+      //   const existingFileId = await checkFileExists(args.name, parentFolderId);
+      //   if (existingFileId) {
+      //     return errorResponse(
+      //       `A document named "${args.name}" already exists in this location. ` +
+      //       `To update it, use updateGoogleDoc with documentId: ${existingFileId}`
+      //     );
+      //   }
+      //
+      //   log('Creating Google Doc', {
+      //     authClientExists: !!authClient,
+      //     parentFolderId,
+      //     authClientType: authClient?.constructor?.name,
+      //     accessToken: authClient?.credentials?.access_token ? 'present' : 'missing',
+      //     tokenLength: authClient?.credentials?.access_token?.length
+      //   });
+      //
+      //   // Debug: Try to get current user to verify auth
+      //   try {
+      //     const aboutResponse = await drive.about.get({ fields: 'user' });
+      //     log('Auth verification - current user:', aboutResponse.data.user?.emailAddress);
+      //   } catch (authError) {
+      //     log('Auth verification failed:', authError instanceof Error ? authError.message : String(authError));
+      //   }
+      //
+      //   // Create empty doc
+      //   let docResponse;
+      //   try {
+      //     docResponse = await drive.files.create({
+      //       requestBody: {
+      //         name: args.name,
+      //         mimeType: 'application/vnd.google-apps.document',
+      //         parents: [parentFolderId]
+      //       },
+      //       fields: 'id, name, webViewLink',
+      //       supportsAllDrives: true,
+      //     });
+      //   } catch (createError: any) {
+      //     log('Drive files.create error details:', {
+      //       message: createError.message,
+      //       code: createError.code,
+      //       errors: createError.errors,
+      //       status: createError.status
+      //     });
+      //     throw createError;
+      //   }
+      //   const doc = docResponse.data;
+      //
+      //   const docs = google.docs({ version: 'v1', auth: authClient });
+      //   await docs.documents.batchUpdate({
+      //     documentId: doc.id!,
+      //     requestBody: {
+      //       requests: [
+      //         {
+      //           insertText: { location: { index: 1 }, text: args.content }
+      //         },
+      //         // Ensure the text is formatted as normal text, not as a header
+      //         {
+      //           updateParagraphStyle: {
+      //             range: {
+      //               startIndex: 1,
+      //               endIndex: args.content.length + 1
+      //             },
+      //             paragraphStyle: {
+      //               namedStyleType: 'NORMAL_TEXT'
+      //             },
+      //             fields: 'namedStyleType'
+      //           }
+      //         }
+      //       ]
+      //     }
+      //   });
+      //
+      //   return {
+      //     content: [{ type: "text", text: `Created Google Doc: ${doc.name}\nID: ${doc.id}\nLink: ${doc.webViewLink}` }],
+      //     isError: false
+      //   };
+      // }
 
-        const parentFolderId = await resolveFolderId(args.parentFolderId);
+      // case "updateGoogleDoc": {
+      //   const validation = UpdateGoogleDocSchema.safeParse(request.params.arguments);
+      //   if (!validation.success) {
+      //     return errorResponse(validation.error.errors[0].message);
+      //   }
+      //   const args = validation.data;
+      //
+      //   const docs = google.docs({ version: 'v1', auth: authClient });
+      //   const document = await docs.documents.get({ documentId: args.documentId });
+      //
+      //   // Delete all content
+      //   // End index of last piece of content (body's last element, fallback to 1 if none)
+      //   const endIndex = document.data.body?.content?.[document.data.body.content.length - 1]?.endIndex || 1;
+      //
+      //   // Google Docs API doesn't allow deleting the final newline character
+      //   // We need to leave at least one character in the document
+      //   const deleteEndIndex = Math.max(1, endIndex - 1);
+      //
+      //   if (deleteEndIndex > 1) {
+      //     await docs.documents.batchUpdate({
+      //       documentId: args.documentId,
+      //       requestBody: {
+      //         requests: [{
+      //           deleteContentRange: {
+      //             range: { startIndex: 1, endIndex: deleteEndIndex }
+      //           }
+      //         }]
+      //       }
+      //     });
+      //   }
+      //
+      //   // Insert new content
+      //   await docs.documents.batchUpdate({
+      //     documentId: args.documentId,
+      //     requestBody: {
+      //       requests: [
+      //         {
+      //           insertText: { location: { index: 1 }, text: args.content }
+      //         },
+      //         // Ensure the text is formatted as normal text, not as a header
+      //         {
+      //           updateParagraphStyle: {
+      //             range: {
+      //               startIndex: 1,
+      //               endIndex: args.content.length + 1
+      //             },
+      //             paragraphStyle: {
+      //               namedStyleType: 'NORMAL_TEXT'
+      //             },
+      //             fields: 'namedStyleType'
+      //           }
+      //         }
+      //       ]
+      //     }
+      //   });
+      //
+      //   return {
+      //     content: [{ type: "text", text: `Updated Google Doc: ${document.data.title}` }],
+      //     isError: false
+      //   };
+      // }
 
-        // Check if document already exists
-        const existingFileId = await checkFileExists(args.name, parentFolderId);
-        if (existingFileId) {
-          return errorResponse(
-            `A document named "${args.name}" already exists in this location. ` +
-            `To update it, use updateGoogleDoc with documentId: ${existingFileId}`
-          );
-        }
+      // case "createGoogleSheet": {
+      //   const validation = CreateGoogleSheetSchema.safeParse(request.params.arguments);
+      //   if (!validation.success) {
+      //     return errorResponse(validation.error.errors[0].message);
+      //   }
+      //   const args = validation.data;
+      //
+      //   const parentFolderId = await resolveFolderId(args.parentFolderId);
+      //
+      //   // Check if spreadsheet already exists
+      //   const existingFileId = await checkFileExists(args.name, parentFolderId);
+      //   if (existingFileId) {
+      //     return errorResponse(
+      //       `A spreadsheet named "${args.name}" already exists in this location. ` +
+      //       `To update it, use updateGoogleSheet with spreadsheetId: ${existingFileId}`
+      //     );
+      //   }
+      //   const sheets = google.sheets({ version: 'v4', auth: authClient });
+      //
+      //   // Create spreadsheet with initial sheet
+      //   const spreadsheet = await sheets.spreadsheets.create({
+      //     requestBody: {
+      //       properties: { title: args.name },
+      //       sheets: [{
+      //         properties: {
+      //           sheetId: 0,
+      //           title: 'Sheet1',
+      //           gridProperties: {
+      //             rowCount: Math.max(args.data.length, 1000),
+      //             columnCount: Math.max(args.data[0]?.length || 0, 26)
+      //           }
+      //         }
+      //       }]
+      //     }
+      //   });
+      //
+      //   await drive.files.update({
+      //     fileId: spreadsheet.data.spreadsheetId || '',
+      //     addParents: parentFolderId,
+      //     fields: 'id, name, webViewLink',
+      //     supportsAllDrives: true,
+      //   });
+      //
+      //   // Now update with data
+      //   await sheets.spreadsheets.values.update({
+      //     spreadsheetId: spreadsheet.data.spreadsheetId!,
+      //     range: 'Sheet1!A1',
+      //     valueInputOption: 'RAW',
+      //     requestBody: { values: args.data }
+      //   });
+      //
+      //   return {
+      //     content: [{ type: "text", text: `Created Google Sheet: ${args.name}\nID: ${spreadsheet.data.spreadsheetId}` }],
+      //     isError: false
+      //   };
+      // }
 
-        log('Creating Google Doc', { 
-          authClientExists: !!authClient, 
-          parentFolderId,
-          authClientType: authClient?.constructor?.name,
-          accessToken: authClient?.credentials?.access_token ? 'present' : 'missing',
-          tokenLength: authClient?.credentials?.access_token?.length
-        });
-
-        // Debug: Try to get current user to verify auth
-        try {
-          const aboutResponse = await drive.about.get({ fields: 'user' });
-          log('Auth verification - current user:', aboutResponse.data.user?.emailAddress);
-        } catch (authError) {
-          log('Auth verification failed:', authError instanceof Error ? authError.message : String(authError));
-        }
-
-        // Create empty doc
-        let docResponse;
-        try {
-          docResponse = await drive.files.create({
-            requestBody: {
-              name: args.name,
-              mimeType: 'application/vnd.google-apps.document',
-              parents: [parentFolderId]
-            },
-            fields: 'id, name, webViewLink',
-            supportsAllDrives: true,
-          });
-        } catch (createError: any) {
-          log('Drive files.create error details:', {
-            message: createError.message,
-            code: createError.code,
-            errors: createError.errors,
-            status: createError.status
-          });
-          throw createError;
-        }
-        const doc = docResponse.data;
-
-        const docs = google.docs({ version: 'v1', auth: authClient });
-        await docs.documents.batchUpdate({
-          documentId: doc.id!,
-          requestBody: {
-            requests: [
-              {
-                insertText: { location: { index: 1 }, text: args.content }
-              },
-              // Ensure the text is formatted as normal text, not as a header
-              {
-                updateParagraphStyle: {
-                  range: {
-                    startIndex: 1,
-                    endIndex: args.content.length + 1
-                  },
-                  paragraphStyle: {
-                    namedStyleType: 'NORMAL_TEXT'
-                  },
-                  fields: 'namedStyleType'
-                }
-              }
-            ]
-          }
-        });
-
-        return {
-          content: [{ type: "text", text: `Created Google Doc: ${doc.name}\nID: ${doc.id}\nLink: ${doc.webViewLink}` }],
-          isError: false
-        };
-      }
-
-      case "updateGoogleDoc": {
-        const validation = UpdateGoogleDocSchema.safeParse(request.params.arguments);
-        if (!validation.success) {
-          return errorResponse(validation.error.errors[0].message);
-        }
-        const args = validation.data;
-
-        const docs = google.docs({ version: 'v1', auth: authClient });
-        const document = await docs.documents.get({ documentId: args.documentId });
-
-        // Delete all content
-        // End index of last piece of content (body's last element, fallback to 1 if none)
-        const endIndex = document.data.body?.content?.[document.data.body.content.length - 1]?.endIndex || 1;
-        
-        // Google Docs API doesn't allow deleting the final newline character
-        // We need to leave at least one character in the document
-        const deleteEndIndex = Math.max(1, endIndex - 1);
-
-        if (deleteEndIndex > 1) {
-          await docs.documents.batchUpdate({
-            documentId: args.documentId,
-            requestBody: {
-              requests: [{
-                deleteContentRange: {
-                  range: { startIndex: 1, endIndex: deleteEndIndex }
-                }
-              }]
-            }
-          });
-        }
-
-        // Insert new content
-        await docs.documents.batchUpdate({
-          documentId: args.documentId,
-          requestBody: {
-            requests: [
-              {
-                insertText: { location: { index: 1 }, text: args.content }
-              },
-              // Ensure the text is formatted as normal text, not as a header
-              {
-                updateParagraphStyle: {
-                  range: {
-                    startIndex: 1,
-                    endIndex: args.content.length + 1
-                  },
-                  paragraphStyle: {
-                    namedStyleType: 'NORMAL_TEXT'
-                  },
-                  fields: 'namedStyleType'
-                }
-              }
-            ]
-          }
-        });
-
-        return {
-          content: [{ type: "text", text: `Updated Google Doc: ${document.data.title}` }],
-          isError: false
-        };
-      }
-
-      case "createGoogleSheet": {
-        const validation = CreateGoogleSheetSchema.safeParse(request.params.arguments);
-        if (!validation.success) {
-          return errorResponse(validation.error.errors[0].message);
-        }
-        const args = validation.data;
-
-        const parentFolderId = await resolveFolderId(args.parentFolderId);
-
-        // Check if spreadsheet already exists
-        const existingFileId = await checkFileExists(args.name, parentFolderId);
-        if (existingFileId) {
-          return errorResponse(
-            `A spreadsheet named "${args.name}" already exists in this location. ` +
-            `To update it, use updateGoogleSheet with spreadsheetId: ${existingFileId}`
-          );
-        }
-        const sheets = google.sheets({ version: 'v4', auth: authClient });
-        
-        // Create spreadsheet with initial sheet
-        const spreadsheet = await sheets.spreadsheets.create({
-          requestBody: { 
-            properties: { title: args.name },
-            sheets: [{
-              properties: {
-                sheetId: 0,
-                title: 'Sheet1',
-                gridProperties: {
-                  rowCount: Math.max(args.data.length, 1000),
-                  columnCount: Math.max(args.data[0]?.length || 0, 26)
-                }
-              }
-            }]
-          }
-        });
-
-        await drive.files.update({
-          fileId: spreadsheet.data.spreadsheetId || '',
-          addParents: parentFolderId,
-          fields: 'id, name, webViewLink',
-          supportsAllDrives: true,
-        });
-
-        // Now update with data
-        await sheets.spreadsheets.values.update({
-          spreadsheetId: spreadsheet.data.spreadsheetId!,
-          range: 'Sheet1!A1',
-          valueInputOption: 'RAW',
-          requestBody: { values: args.data }
-        });
-
-        return {
-          content: [{ type: "text", text: `Created Google Sheet: ${args.name}\nID: ${spreadsheet.data.spreadsheetId}` }],
-          isError: false
-        };
-      }
-
-      case "updateGoogleSheet": {
-        const validation = UpdateGoogleSheetSchema.safeParse(request.params.arguments);
-        if (!validation.success) {
-          return errorResponse(validation.error.errors[0].message);
-        }
-        const args = validation.data;
-
-        const sheets = google.sheets({ version: 'v4', auth: authClient });
-        await sheets.spreadsheets.values.update({
-          spreadsheetId: args.spreadsheetId,
-          range: args.range,
-          valueInputOption: 'RAW',
-          requestBody: { values: args.data }
-        });
-
-        return {
-          content: [{ type: "text", text: `Updated Google Sheet range: ${args.range}` }],
-          isError: false
-        };
-      }
+      // case "updateGoogleSheet": {
+      //   const validation = UpdateGoogleSheetSchema.safeParse(request.params.arguments);
+      //   if (!validation.success) {
+      //     return errorResponse(validation.error.errors[0].message);
+      //   }
+      //   const args = validation.data;
+      //
+      //   const sheets = google.sheets({ version: 'v4', auth: authClient });
+      //   await sheets.spreadsheets.values.update({
+      //     spreadsheetId: args.spreadsheetId,
+      //     range: args.range,
+      //     valueInputOption: 'RAW',
+      //     requestBody: { values: args.data }
+      //   });
+      //
+      //   return {
+      //     content: [{ type: "text", text: `Updated Google Sheet range: ${args.range}` }],
+      //     isError: false
+      //   };
+      // }
 
       case "getGoogleSheetContent": {
         const validation = GetGoogleSheetContentSchema.safeParse(request.params.arguments);
