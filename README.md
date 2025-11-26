@@ -2,12 +2,19 @@
 
 A Model Context Protocol (MCP) server that provides secure integration with Google Drive, Docs, Sheets, and Slides. It allows Claude Desktop and other MCP clients to manage files in Google Drive through a standardized interface.
 
+## 🔱 Fork Notice
+
+This is a fork of [piotr-agier/google-drive-mcp](https://github.com/piotr-agier/google-drive-mcp) with added support for **Google Shared Drives (Team Drives)**.
+
+The original package only supports personal "My Drive" files. This fork adds `supportsAllDrives: true` and `includeItemsFromAllDrives: true` to all Google Drive API calls, enabling access to Shared Drives.
+
 ## Features
 
 - **Multi-format Support**: Work with Google Docs, Sheets, Slides, and regular files
 - **File Management**: Create, update, delete, rename, and move files and folders
 - **Advanced Search**: Search across your entire Google Drive
 - **Folder Navigation**: List and navigate through folder hierarchies with path support (e.g., `/Work/Projects`)
+- **Shared Drive Support**: Full access to Google Shared Drives (Team Drives), not just personal "My Drive"
 - **MCP Resource Protocol**: Files accessible as MCP resources for reading content
 - **Secure Authentication**: OAuth 2.0 with automatic token refresh
 
@@ -57,6 +64,158 @@ Create a Templates folder and add standard documents like
 a Meeting Notes template, Project Proposal template,
 and Budget Spreadsheet template.
 ```
+
+## Shared Drive Support
+
+This fork adds full support for **Google Shared Drives** (formerly known as Team Drives). Unlike the original package, which only works with personal "My Drive" files, this fork can access and manage files in any Shared Drive you have access to.
+
+### What Changed
+
+All Google Drive API calls now include:
+- `supportsAllDrives: true` - Enables Shared Drive support in API requests
+- `includeItemsFromAllDrives: true` - Includes Shared Drive items in list and search results
+
+This means:
+- **Search** now returns results from both your personal Drive and all Shared Drives you can access
+- **List folder** works with Shared Drive folders
+- **File operations** (create, update, delete, move, rename) work with Shared Drive files
+- **Google Workspace files** (Docs, Sheets, Slides) can be created in Shared Drive folders
+
+### Finding Shared Drive Folder IDs
+
+To work with a Shared Drive folder, you need its folder ID. You can find this from the URL:
+
+1. Navigate to the Shared Drive folder in your browser
+2. Look at the URL: `https://drive.google.com/drive/folders/0AIgRIXUjogfkUk9PVA`
+3. The folder ID is the last part: `0AIgRIXUjogfkUk9PVA`
+
+### Shared Drive Usage Examples
+
+#### List Contents of a Shared Drive Folder
+```
+List all files in the Shared Drive folder with ID 0AIgRIXUjogfkUk9PVA
+```
+
+Using the `listFolder` tool:
+- `folderId`: `0AIgRIXUjogfkUk9PVA` (your Shared Drive folder ID)
+
+#### Search Across All Drives
+```
+Search for files containing "quarterly report" in all my Drives
+```
+
+The `search` tool now automatically includes results from:
+- Your personal "My Drive"
+- All Shared Drives you have access to
+
+#### Create a Document in a Shared Drive
+```
+Create a Google Doc called "Team Meeting Notes" in the Shared Drive folder 0AIgRIXUjogfkUk9PVA
+```
+
+Using the `createGoogleDoc` tool:
+- `name`: `Team Meeting Notes`
+- `content`: Your document content
+- `parentFolderId`: `0AIgRIXUjogfkUk9PVA`
+
+### Permissions Note
+
+Your access to Shared Drive files depends on your permissions within that Shared Drive. If you receive permission errors, check that:
+1. You have access to the Shared Drive
+2. Your role in the Shared Drive allows the operation you're attempting (e.g., "Content Manager" or higher for creating/editing files)
+
+## Installation & Setup (Claude Code)
+
+### Step 1: Clone and build the repo
+```bash
+git clone https://github.com/edoardosantagata/google-drive-mcp.git
+cd google-drive-mcp
+npm install
+npm run build
+```
+
+### Step 2: Set up Google OAuth credentials
+
+1. Go to [Google Cloud Console](https://console.cloud.google.com/)
+2. Create a new project (or select existing)
+3. Enable these APIs:
+   - Google Drive API
+   - Google Docs API
+   - Google Sheets API
+   - Google Slides API
+4. Go to **Credentials** → **Create Credentials** → **OAuth 2.0 Client ID**
+5. Select **Desktop app** as the application type
+6. Download the credentials JSON file
+7. Save it to `~/.config/mcp/google-drive-credentials.json`
+
+The file should look like:
+```json
+{
+  "installed": {
+    "client_id": "YOUR_CLIENT_ID.apps.googleusercontent.com",
+    "project_id": "your-project-id",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "client_secret": "YOUR_CLIENT_SECRET",
+    "redirect_uris": ["http://localhost"]
+  }
+}
+```
+
+### Step 3: Authenticate
+
+Run the auth command to complete the OAuth flow:
+```bash
+GOOGLE_DRIVE_OAUTH_CREDENTIALS="$HOME/.config/mcp/google-drive-credentials.json" node dist/index.js auth
+```
+
+This will open a browser window. Sign in with your Google account and grant permissions. Tokens will be saved to `~/.config/google-drive-mcp/tokens.json`.
+
+### Step 4: Configure Claude Code
+
+Add the MCP server to your `~/.claude.json` file. Find the `"mcpServers": {}` section near the bottom and update it:
+```json
+{
+  "mcpServers": {
+    "google-drive": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["/FULL/PATH/TO/google-drive-mcp/dist/index.js"],
+      "env": {
+        "GOOGLE_DRIVE_OAUTH_CREDENTIALS": "/Users/YOURUSERNAME/.config/mcp/google-drive-credentials.json"
+      }
+    }
+  }
+}
+```
+
+**Important:** Replace `/FULL/PATH/TO/` and `YOURUSERNAME` with your actual paths.
+
+### Step 5: Restart Claude Code and verify
+```bash
+pkill -9 -f claude
+claude
+```
+
+Then run `/mcp` to verify the google-drive server is connected.
+
+## Shared Drive Usage
+
+To access files in a Shared Drive, use the folder ID from the URL.
+
+For example, from this URL:
+```
+https://drive.google.com/drive/folders/0AIgRIXUjogfkUk9PVA
+```
+
+The folder ID is `0AIgRIXUjogfkUk9PVA`.
+
+**Example commands in Claude Code:**
+- "List files in folder 0AIgRIXUjogfkUk9PVA"
+- "Search for quarterly report in Google Drive"
+- "Read the contents of file ID xyz123"
+
+Both personal "My Drive" and Shared Drives are now accessible.
 
 ## Requirements
 
@@ -711,6 +870,25 @@ The Dockerfile expects the `dist/` directory to exist from your local build.
 -v ~/.config/google-drive-mcp/tokens.json:/config/tokens.json:ro
 ```
 
+### Claude Code-Specific Issues
+
+#### MCP not showing in `/mcp`
+- Ensure the path in `~/.claude.json` is correct and absolute
+- Check that `dist/index.js` exists (run `npm run build` if not)
+- Restart Claude Code completely: `pkill -9 -f claude && claude`
+
+#### "Authentication required" errors
+- Run the auth command again: `GOOGLE_DRIVE_OAUTH_CREDENTIALS="$HOME/.config/mcp/google-drive-credentials.json" node dist/index.js auth`
+- Verify tokens exist: `cat ~/.config/google-drive-mcp/tokens.json`
+
+#### Shared Drive shows empty
+- Verify you have access to the Shared Drive in your browser
+- Check that the folder ID is correct (not the full URL)
+- Ensure you authenticated with an account that has Shared Drive access
+
+#### Project-specific override issues
+If the MCP works in some directories but not others, you may have project-specific settings in `~/.claude.json`. Search for `"google-drive"` entries under specific project paths and remove them, keeping only the root-level `"mcpServers"` config.
+
 ### Debug Mode
 
 Enable detailed logging:
@@ -818,11 +996,13 @@ Contributions are welcome! Please:
 
 ## Support
 
-- 📚 [Documentation](https://github.com/piotr-agier/google-drive-mcp)
-- 🐛 [Issue Tracker](https://github.com/piotr-agier/google-drive-mcp/issues)
+- 📚 [Original Documentation](https://github.com/piotr-agier/google-drive-mcp)
+- 🐛 [Issue Tracker (this fork)](https://github.com/edoardosantagata/google-drive-mcp/issues)
+- 🐛 [Issue Tracker (original)](https://github.com/piotr-agier/google-drive-mcp/issues)
 
 ## Acknowledgments
 
 - Built on [Model Context Protocol](https://modelcontextprotocol.io)
 - Uses [Google APIs Node.js Client](https://github.com/googleapis/google-api-nodejs-client)
+- Forked from [piotr-agier/google-drive-mcp](https://github.com/piotr-agier/google-drive-mcp)
 - Inspired by the MCP community
